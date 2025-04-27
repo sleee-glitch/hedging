@@ -2,34 +2,39 @@
 {% load otree static %}
 
 {% block title %}
-Summary: Calculation of Potential Outcome
+    Your final earnings
 {% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
+<div class="container">
+    <!-- Initial instructions -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12">
+            <ul style="font-size: 1.25rem; line-height: 1.5;">
+          <li> You will initially start with $18.</li>
+            <li> Your final earnings can go up or down based on the choices you make. </li>
+            <li> Even in the case of a loss, your overall earnings cannot be less than 0.</li>
+             <li>At the final stage, your earnings are determined based on your decision.</li>
+             <li>For each investment decision, only one possibility (either A or B) will occur based on their respective chances.</li>
+                <li> Then, your earnings are calculated using this formula:
+                        <div class="alert alert-info">
+                            <strong>Final Earnings = Your Allocation on Investment 1 × (Investment 1 outcome) + (Your Allocation on Investment 2) × (Investment 2 outcome)</strong>
+                        </div>
+                    </li>
+                </ul>
 
 
-        <p>Suppose you allocate 0.8 in Apple and 0.2 in Banana.</p>
 
-        <div class="mt-3">
-            <span class="text-muted">With 50% chance:</span><br>
-            <span class="text-success"> 0.8 × Apple poor (-10)</span> +
-            <span class="text-danger"> 0.2 × Banana well (10)</span> = -6
+
+
+            </ul>
         </div>
+    </div>
 
-        <div class="mt-2">
-            <span class="text-muted">With 50% chance:</span><br>
-            <span class="text-success"> 0.8 × Apple well (10)</span> +
-            <span class="text-danger"> 0.2 × Banana poor (-10)</span> = 6
-        </div>
-
-        <div class="mt-3">
-            <p><strong>Your final payment is determined by applying probability to your potential outcome:</strong> <br>
-            50% × (-6) + 50% × (6) = <strong>0</strong></p>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            {% next_button %}
         </div>
     </div>
 </div>
-
-{% next_button %}
 {% endblock %}

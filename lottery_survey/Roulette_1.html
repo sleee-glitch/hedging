@@ -58,9 +58,9 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                         <li><strong>Possibility A ({{ p }}% chance):</strong> Investment 1 yields ${{ x1_l }}, Investment 2 yields ${{ x2_h }}</li>
-                        <li><strong>Possibility B ({{ one_minus_p }}% chance):</strong> Investment 1 yields ${{ x1_h }}, Investment 2 yields ${{ x2_l }}</li>
-                        <li>Your allocation in the Investments: ${{ alpha }} to Investment 1 and ${{ one_minus_alpha }} to Investment 2</li>
+                         <li><strong>Possibility A ({{ p }}% chance):</strong> Investment 1 yields {{ x1_l }}, Investment 2 yields {{ x2_h }}</li>
+                        <li><strong>Possibility B ({{ one_minus_p }}% chance):</strong> Investment 1 yields {{ x1_h }}, Investment 2 yields {{ x2_l }}</li>
+                        <li>Your allocation in the Investments: ${{ alpha }} to Investment 1 and {{ one_minus_alpha }} to Investment 2</li>
                     </ul>
                 </div>
             </div>
@@ -210,7 +210,7 @@
 
         // Convert to degrees (full circle = 360 degrees)
         const totalDegrees = (rotations * 360) + (degreeOffset * 3.6);
-        let currentRotation = 0;
+        let currentRotation = 1;
         const step = 15; // Increased step for faster rotation
         const initialSpeed = 15; // Faster initial speed (lower milliseconds)
         let speed = initialSpeed;
@@ -221,8 +221,8 @@
             if (currentRotation < totalDegrees) {
                 currentRotation += step;
 
-                // Apply rotation transform to the chart
-                pieChart.options.rotation = currentRotation * Math.PI / 180;
+                // spin speed
+                pieChart.options.rotation = currentRotation * Math.PI / 10;
                 pieChart.update();
 
                 // Slow down gradually
@@ -263,14 +263,14 @@
 
         if (spinResult === 'p') {
             // If spinner landed on p (Possibility A)
-            totalExpectedValue = alpha * x1_l + one_minus_alpha * x2_h;
+            totalExpectedValue = 0.1*(alpha * x1_l + one_minus_alpha * x2_h);
             resultHeader.innerHTML = "<strong>The wheel landed on Possibility A ({{ p }}%):</strong>";
-            calculation = `(${alpha} × ${x1_l}) + (${one_minus_alpha} × ${x2_h}) = ${totalExpectedValue.toFixed(2)}`;
+          //calculation = `(${alpha} × ${x1_l}) + (${one_minus_alpha} × ${x2_h}) = ${totalExpectedValue.toFixed(2)}`;
         } else {
             // If spinner landed on one_minus_p (Possibility B)
-            totalExpectedValue = alpha * x1_h + one_minus_alpha * x2_l;
+            totalExpectedValue = 0.1*(alpha * x1_h + one_minus_alpha * x2_l);
             resultHeader.innerHTML = "<strong>The wheel landed on Possibility B ({{ one_minus_p }}%):</strong>";
-            calculation = `(${alpha} × ${x1_h}) + (${one_minus_alpha} × ${x2_l}) = ${totalExpectedValue.toFixed(2)}`;
+            //calculation = `(${alpha} × ${x1_h}) + (${one_minus_alpha} × ${x2_l}) = ${totalExpectedValue.toFixed(2)}`;
         }
 
         resultHeader.style.display = 'block';
@@ -280,12 +280,12 @@
         if (totalExpectedValue > 0) {
             resultMessage = `<div class="alert alert-success">
                 <h4>Congratulations! Your additional earnings are: <strong>$${totalExpectedValue.toFixed(2)}</strong></h4>
-                <p class="mb-0"><small>Calculation: ${calculation}</small></p>
+
             </div>`;
         } else if (totalExpectedValue < 0) {
             resultMessage = `<div class="alert alert-danger">
                 <h4>Unfortunately, you have incurred a loss. Your earnings change: <strong>$${totalExpectedValue.toFixed(2)}</strong></h4>
-                <p class="mb-0"><small>Calculation: ${calculation}</small></p>
+
             </div>`;
         } else {
             resultMessage = `<div class="alert alert-info">

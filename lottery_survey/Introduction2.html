@@ -1,19 +1,18 @@
 {% extends "global/Page.html" %}
-{% block title %}Task{% endblock %}
+{% block title %} Your payment: {% endblock %}
 {% block content %}
     <div class="container">
+
         <ul style="font-size: 1.25rem; line-height: 1.5;">
-    <li>Your task is to allocate $1 between two investments: <strong style="color: darkslateblue;">Investment 1</strong> and <strong style="color: darkslategray;">Investment 2</strong>.</li>
-    <li> Each investment has 2 possibilities: <strong style = "color: royalblue"> Possibility A</strong> and <strong style = "color: darkorange"> Possibility B</strong>.</li>
-            <li>An investment can either gain you extra money or lose you extra money.</li>
-    <ul>
-        <li>In the case where <strong style="color: darkslateblue;">Investment 1</strong>  is a gain(+), and <strong style="color: darkslategray;">Investment 2</strong> is a loss(-) is <strong style = "color: royalblue"> Possibility A</strong>.</li>
-        <li>In the case where <strong style="color: darkslategray;">Investment 2</strong> is a gain(+), and <strong style="color: darkslateblue;">Investment 1</strong>  is a loss(-) is <strong style = "color: darkorange"> Possibility B</strong>. </li>
-    </ul>
-    <li>You will always be fully informed of the chance of <strong style = "color: royalblue"> Possibility A</strong> and <strong style = "color: darkorange"> Possibility B</strong>. </li>
-</ul>
+<li>You will initially start with <strong>$18</strong>.</li>
+<li>Your investment decisions will impact your final earnings.</li>
+<li>Each investment outcome can yield a <strong>gain</strong> (you earn extra money) or a <strong>loss</strong> (you lose money).</li>
 
+<li style="text-decoration: underline;">Even in the case of losses, your total earnings will not fall below $0.</li>
 
-{% next_button %}
+            <li> You have to allocate your money according to your true preferences in each case.</li>
+        </ul>
+
+        {% next_button %}
     </div>
 {% endblock %}

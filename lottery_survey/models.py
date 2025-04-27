@@ -11,10 +11,13 @@ from otree.api import (
 import random
 
 
+RISK_CHOICES = [(i, str(i)) for i in range(1, 11)]
 
 
 class Player(BasePlayer):
-
+    selected_round = models.IntegerField()
+    p = models.FloatField()
+    spin_result = models.StringField()  # for the spin result
 
     # Consent form fields
     consent_age = models.BooleanField(
@@ -87,22 +90,90 @@ class Player(BasePlayer):
     )
 
     # Financial Literacy
-    fin_change = models.IntegerField(label="")
-    fin_lottery = models.IntegerField(label="")
-    fin_sale = models.IntegerField(label="")
-    fin_cardealer = models.IntegerField(label="")
-    fin_interest = models.IntegerField(label="")
-    fin_disease = models.IntegerField(label="")
+    q_interest_rates = models.StringField(
+        choices=["More than $102", "Exactly $102", "Less than $102", "Don’t know"],
+        widget=widgets.RadioSelect,
+    )
+
+    q_inflation = models.StringField(
+        choices=["More than today", "The same as today", "Less than today", "Don’t know"],
+        widget=widgets.RadioSelect,
+    )
+
+    q_risk_diversification = models.StringField(
+        choices=["True", "False", "Don’t know"],
+        widget=widgets.RadioSelect,
+    )
+
+    q_probability = models.StringField(
+        choices=["$0", "$1", "$10", "$100", "Don’t know"],
+        widget=widgets.RadioSelect,
+    )
 
     # Risk Attitudes
-    risk_general = models.IntegerField(label="How would you rate your willingness to take risks in general?", min=1,
-                                       max=10)
-    risk_driving = models.IntegerField(label="How would you rate your willingness to take risks while driving?", min=1,
-                                       max=10)
+    risk_general = models.IntegerField(
+        label="How would you rate your willingness to take risks in general?",
+        choices=RISK_CHOICES,
+        widget=widgets.RadioSelectHorizontal
+    )
+    risk_driving = models.IntegerField(
+        label="How would you rate your willingness to take risks while driving?",
+        choices=RISK_CHOICES,
+        widget=widgets.RadioSelectHorizontal
+    )
     risk_career = models.IntegerField(
-        label="How would you rate your willingness to take risks in your professional career?", min=1, max=10)
+        label="How would you rate your willingness to take risks in your professional career?",
+        choices=RISK_CHOICES,
+        widget=widgets.RadioSelectHorizontal
+    )
     risk_health = models.IntegerField(
-        label="How would you rate your willingness to take risks with respect to your health?", min=1, max=10)
+        label="How would you rate your willingness to take risks with respect to your health?",
+        choices=RISK_CHOICES,
+        widget=widgets.RadioSelectHorizontal
+    )
+
+    # Matrix Reasoning (Raven's Test)
+    Matrix_B09 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6],
+        widget=widgets.RadioSelectHorizontal
+    )
+    Matrix_B11 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6],
+        widget=widgets.RadioSelectHorizontal
+    )
+    Matrix_C02 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6],
+        widget=widgets.RadioSelectHorizontal
+    )
+    Matrix_C05 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6],
+        widget=widgets.RadioSelectHorizontal
+    )
+    Matrix_C12 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6],
+        widget=widgets.RadioSelectHorizontal
+    )
+    Matrix_D05 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6, 7, 8],
+        widget=widgets.RadioSelectHorizontal
+    )
+    Matrix_D07 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6, 7, 8],
+        widget=widgets.RadioSelectHorizontal
+    )
+    Matrix_E07 = models.IntegerField(
+        label="",
+        choices=[1, 2, 3, 4, 5, 6, 7, 8],
+        widget=widgets.RadioSelectHorizontal
+    )
+
 
     # Decision Making Scenarios
     scenario_jar = models.StringField(
@@ -129,19 +200,21 @@ class Player(BasePlayer):
     continue_field = models.StringField(label="")
     exit_survey_completed = models.BooleanField(initial=False)
     passed_comprehension = models.BooleanField(initial=False)
-
+    predetermined_result = models.StringField()  # Store 'p' or 'one_minus_p'
+    spin_result = models.StringField()  # The result reported from frontend
+    payout_amount = models.FloatField()  # The calculated payout amount
     # models.py
     question_1 = models.StringField(
-        choices=['$0.2', '$0.5', '$0.8'],
+        choices=['$0.20', '$0.50', '$0.80'],
         widget=widgets.RadioSelect()
     )
 
     question_2=models.StringField(
             choices=[
-                "They always move in the same direction",
-                "They always move in opposite directions",
-                "Their movements are unrelated to each other",
-                "They always provide the same returns"
+                "They always increase or decrease together",
+                "One always gains when the other loses",
+                "Their returns have no consistent relationship",
+                "They always produce identical returns"
             ],
         widget=widgets.RadioSelect()
     )
@@ -238,6 +311,7 @@ class Constants(BaseConstants):
             'x2_l_values': [-13.90, -13.20, -12.40, -11.60, -10.80, -10.00, -9.20, -8.40, -7.60]
         }
     ]
+
 
     practice_scenarios = [
         {

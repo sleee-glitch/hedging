@@ -1,4 +1,5 @@
 {% extends "global/Page.html" %}
+{% load custom_filters %}
 {% load otree static %}
 
 {% block title %}
@@ -6,138 +7,179 @@
 {% endblock %}
 
 {% block content %}
+
+
 <div class="container">
     <div class="row justify-content-center mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <p>With probability of <strong>{{ p }}%</strong>:
-                        Investment 1 yields ${{ x1_l }}, while Investment 2 yields ${{ x2_h }}.
-                    </p>
-                    <p>With probability of <strong>{{ one_minus_p }}%</strong>:
-                        Investment 1 yields ${{ x1_h }}, while Investment 2 yields ${{ x2_l }}.
-                    </p>
-                  <div style="font-size: 1.2rem; padding-left: 15px;">
-                        <p>Your decision on the previous screen indicates that your allocation was:</p>
-                        <ul style="list-style-type: disc;">
-                            <li>Investment 1: <strong> ${{ player.alpha }}</strong></li>
-                            <li>Investment 2: <strong> ${{ investment_2_amount }}</strong></li>
-                        </ul>
-                    </div>
-                </div>
-        </div>
-    </div>
 
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <p>On a scale from 0% to 100%, how certain are you that your current allocation maximizes your earnings?</p>
+            <div class="alert alert-purple" style="background-color: #e6e6fa; border: 1px solid #d8d8f0; border-radius: 5px; padding: 15px;">
+            <h5 class="mb-3"> In this round,</h5>
+
+                  <p>With <strong>{{ p }} out of 100 cases </strong>:
+    Investment 1 yields {{ x1_l_formatted }}, while Investment 2 yields {{ x2_h_formatted }}.
+</p>
+<p>With <strong>{{ one_minus_p }} out of 100 cases</strong>:
+    Investment 1 yields {{ x1_h_formatted }}, while Investment 2 yields {{ x2_l_formatted }}.
+</p>
+<p>Your decision on the previous screen indicates that your allocation was:</p>
+<ul style="list-style-type: disc;">
+    <li>Investment 1: <strong>{{ player_alpha_formatted }}</strong></li>
+    <li>Investment 2: <strong>{{ investment_2_amount_formatted }}</strong></li>
+</ul>
+</div>
+
+
+
+<p style="text-align: center;">
+<strong>How certain</strong> are you that allocating approximately <strong>${{ player.alpha }}</strong> to Investment 1 is your best decision, given your preferences?</p>
+
 
                     <div class="form-group">
-                        <label for="certainty_value" style="font-size: 1.2em; display: block; margin-bottom: 10px;">
-                            <strong>Certainty Level:</strong> <span id="certainty_value">Select a value</span>
+                        <label for="certainty_slider" style="font-size: 1em; display: block; margin-bottom: 10px;">
+
                         </label>
 
                         <!-- Hidden input to store the selected certainty value -->
                         <input type="hidden" id="certainty_input" name="certainty" value="">
 
-                        <!-- Button grid for certainty selection -->
-                        <div class="certainty-buttons text-center">
-                            <div class="row mb-2">
-                                <div class="col-12">
-                                    <div class="d-flex justify-content-between">
-                                        <span><strong>Very Uncertain</strong></span>
-                                        <span><strong>Completely Certain</strong></span>
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Slider for certainty selection -->
+                        <div class="slider-container">
 
-                            <!-- Small circular buttons in a single row -->
-                            <div class="d-flex justify-content-center flex-wrap gap-2">
-                                <!-- Buttons -->
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="0" onclick="selectCertainty(0)">0%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="5" onclick="selectCertainty(5)">5%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="10" onclick="selectCertainty(10)">10%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="15" onclick="selectCertainty(15)">15%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="20" onclick="selectCertainty(20)">20%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="25" onclick="selectCertainty(25)">25%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="30" onclick="selectCertainty(30)">30%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="35" onclick="selectCertainty(35)">35%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="40" onclick="selectCertainty(40)">40%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="45" onclick="selectCertainty(45)">45%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="50" onclick="selectCertainty(50)">50%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="55" onclick="selectCertainty(55)">55%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="60" onclick="selectCertainty(60)">60%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="65" onclick="selectCertainty(65)">65%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="70" onclick="selectCertainty(70)">70%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="75" onclick="selectCertainty(75)">75%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="80" onclick="selectCertainty(80)">80%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="85" onclick="selectCertainty(85)">85%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="90" onclick="selectCertainty(90)">90%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="95" onclick="selectCertainty(95)">95%</button>
-                                <button type="button" class="btn btn-outline-primary certainty-btn btn-sm" data-value="100" onclick="selectCertainty(100)">100%</button>
-                            </div>
-                        </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+    <strong>Very uncertain</strong>
+    <strong>Completely certain</strong>
+</div>
+
+<div class="position-relative mb-2">
+    <input type="range" class="form-range no-default" id="certainty_slider" min="0" max="100" step="1" style="width: 100%;">
+    <div class="d-flex justify-content-between px-2 mt-1">
+        <span>0%</span>
+        <span>25%</span>
+        <span>50%</span>
+        <span>75%</span>
+        <span>100%</span>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end align-items-center">
+    <input type="text" id="certainty_value" class="form-control" style="width: 60px; text-align: center;" readonly>
+    <span class="ms-1">%</span>
+</div>
+
+
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
 
     <div class="row justify-content-center mt-4">
         <div class="col-md-12 text-center">
             {% next_button %}
         </div>
     </div>
-</div>
+
 
 <script>
-    function selectCertainty(value) {
-        // Update the hidden input value
-        document.getElementById('certainty_input').value = value;
+    document.addEventListener("DOMContentLoaded", function() {
+        const slider = document.getElementById('certainty_slider');
+        const certaintyInput = document.getElementById('certainty_input');
+        const certaintyValue = document.getElementById('certainty_value');
+        const nextButton = document.querySelector('.otree-btn-next');
 
-        // Update the displayed value
-        document.getElementById('certainty_value').textContent = value + '%';
+        // Set initial blank values
+        slider.value = "";
+        certaintyInput.value = "";
+        certaintyValue.value = "";
 
-        // Remove active class from all buttons
-        const buttons = document.querySelectorAll('.certainty-btn');
-        buttons.forEach(btn => btn.classList.remove('active'));
+        // Disable next button initially
+        if (nextButton) {
+            nextButton.disabled = true;
+        }
 
-        // Add active class to the selected button
-        document.querySelector(`.certainty-btn[data-value="${value}"]`).classList.add('active');
-    }
+        // Update the hidden input and displayed value when the slider moves
+        slider.addEventListener('input', function() {
+            slider.classList.remove("no-default");
+            slider.classList.add("active");
 
-    // No initialization to select any button by default
-    // The user must make an explicit selection
+            certaintyInput.value = slider.value;
+            certaintyValue.value = slider.value;
+
+            // Enable next button when slider is used
+            if (nextButton) {
+                nextButton.disabled = false;
+            }
+        });
+    });
 </script>
 
-<!-- Custom CSS to style the layout -->
+
+<!-- Custom CSS to style the slider -->
 <style>
-    .certainty-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    .slider-container {
+        margin: 20px 10px;
     }
 
-    .certainty-item span {
-        font-size: 12px; /* Smaller font for percentages */
-        margin-bottom: 2px;
+    /* Hide the slider thumb initially */
+    input[type=range].no-default::-webkit-slider-thumb {
+        visibility: hidden;
+    }
+    input[type=range].no-default::-moz-range-thumb {
+        visibility: hidden;
+    }
+    input[type=range].no-default::-ms-thumb {
+        visibility: hidden;
     }
 
-    .certainty-btn {
-        width: 30px; /* Make buttons smaller */
-        height: 30px;
-        border-radius: 50%; /* Circular shape */
-        font-size: 10px; /* Smaller text */
+    input[type=range].no-default::-webkit-slider-runnable-track {
+        background: lightgray;
+    }
+
+    /* Show the thumb when active class is added */
+    input[type=range].active::-webkit-slider-thumb,
+    input[type=range].active::-moz-range-thumb,
+    input[type=range].active::-ms-thumb {
+        visibility: visible;
+    }
+
+    /* Style for the slider thumb */
+    .form-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #0d6efd;
+        cursor: pointer;
+    }
+
+    .form-range::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #0d6efd;
+        cursor: pointer;
+    }
+
+    .form-range::-webkit-slider-runnable-track {
+        height: 4px;
+        background: #ddd;
+        border-radius: 2px;
+    }
+
+    .tick-marks span {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .tick-labels {
+        font-size: 12px;
+        color: #666;
+        margin-top: -5px;
+    }
+
+    .tick-labels span {
+        width: 30px;
         text-align: center;
-        padding: 0;
-    }
-
-    .certainty-buttons .d-flex {
-        overflow-x: auto; /* Allow horizontal scrolling if needed */
-        white-space: nowrap;
     }
 </style>
 

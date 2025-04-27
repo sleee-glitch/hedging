@@ -421,26 +421,26 @@ class EarningsExplanation(Page):
 
 # Define the initial sequence
 initial_sequence = [
-  #  welcome,
-  #  Introduction2,
-  #  Introduction,
-   # example,
-  #  example2,
-  #  example22,
-  #  example222,
-   # example3,
+    welcome,
+    Introduction2,
+    Introduction,
+    example,
+    example2,
+    example22,
+    example222,
+    example3,
 ]
 
 practice_rounds = [PracticeRound]
 
 # Define the main experiment sequence
 main_sequence = [
-  # ComprehensionCheck,
-  #  EarningsExplanation,
-  #  LotterySurvey,
+   ComprehensionCheck,
+    EarningsExplanation,
+    LotterySurvey,
     CognitiveUncertainty,
-  #  SurveyIntroduc,
-  #  Demographics,
+    SurveyIntroduc,
+    Demographics,
     CognitiveReflectionTest,
     MatrixReasoning,
     FinancialLiteracy,
